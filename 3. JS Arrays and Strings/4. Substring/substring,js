@@ -1,0 +1,13 @@
+/* 
+Write a function that receives a string and two numbers. 
+The numbers will be a starting index and count of elements to substring. Print the result.
+*/
+
+function skip(string, num1, num2){
+    let result = string.substring(num1,num1+num2);
+    console.log(result);
+}
+
+skip('ASentence', 1, 8);
+skip('SkipWord', 4, 7);
+skip('NaBabaTiHvyrchiloto', 2, 7);
