@@ -5,8 +5,29 @@ If you receive the same weekday twice, the meeting cannot be scheduled so print 
 In the end, print a list of all successful meetings. 
 */
 
-function solve(){
+function solve(array){
 
+    let meetings = {};
+
+    for (const meeting of array) {
+        let tokens = meeting.split(' ');
+        let day = tokens[0];
+        let person = tokens[1];
+
+        if(Object.keys(meetings).includes(day)){
+            console.log(`Conflict on ${day}!`);
+            continue;
+        } else {
+            console.log(`Scheduled for ${day}`);
+            meetings[day] = person;
+        }
+
+       
+    }
+
+    for (let day in meetings) {
+        console.log(`${day} -> ${meetings[day]}`);
+        }
 }
 
 solve(['Monday Peter',
