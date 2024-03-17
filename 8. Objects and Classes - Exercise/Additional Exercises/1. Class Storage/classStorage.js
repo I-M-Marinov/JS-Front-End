@@ -26,50 +26,58 @@ function solve() {
         }
 
         addProduct(product) {
-            if (this.capacity >= product.quantity) {
-                if (!this.storage[product.name]) {
-                    this.storage[product.name] = product;
-                } else {
-                    if (this.capacity >= product.quantity) {
-                        this.storage[product.name].quantity += product.quantity;
-                    } else {
-                        return false; 
-                    }
-                }
-                this.capacity -= product.quantity;
-                this.totalCost += product.price * product.quantity;
-                return true;
-            } else {
+
+            if (typeof product.name !== 'string') {
                 return false; 
             }
+          
+            if (product.quantity <= 0 || product.price <= 0 || this.capacity < product.quantity) {
+                return false; 
+            }
+        
+            if (!this.storage[product.name]) {
+                this.storage[product.name] = product;
+            } else {
+                
+                if (this.capacity >= product.quantity) {
+                    this.storage[product.name].quantity += product.quantity;
+                    this.storage[product.name].price = product.price;
+                } else {
+                    return false; 
+                }
+            }
+        
+            this.capacity -= product.quantity;
+            this.totalCost += product.price * product.quantity;
+            return true;
         }
 
 
         getProducts() {
             const productsArray = [];
             for (const productName in this.storage) {
-                productsArray.push(JSON.stringify(this.storage[productName]));
+                productsArray.push(JSON.stringify(this.storage[productName]) + '\n');
             }
             this.productsArray = productsArray;
-            return productsArray.join('\n');
+            return productsArray.join('').trim();
         }
 
     }
 
-    let productOne = {name: 'Tomato', price: 0.90, quantity: 19};
-    let productTwo = {name: 'Potato', price: 1.10, quantity: 10};
-    let productThree = {name: 'Bread', price: 1.10, quantity: 8};
-    let storage = new Storage(30);
-    storage.addProduct(productOne);
-    console.log(storage.totalCost);
-    storage.addProduct(productTwo);
-    console.log(storage.totalCost);
-    storage.addProduct(productThree);
-    console.log(storage.totalCost);
-    console.log(storage.getProducts());
-    console.log(storage.capacity);
+let productOne = {name: 'Cucamber', price: 1.50, quantity: 15};
+let productTwo = {name: 'Tomato', price: 0.90, quantity: 25};
+let productThree = {name: 'Bread', price: 1.10, quantity: 8};
+let storage = new Storage(50);
+storage.addProduct(productOne);
+storage.addProduct(productTwo);
+storage.addProduct(productThree);
+console.log(storage.getProducts());
+console.log(storage.capacity);
+console.log(storage.totalCost);
+
 
 }
+
 
 solve();
 
