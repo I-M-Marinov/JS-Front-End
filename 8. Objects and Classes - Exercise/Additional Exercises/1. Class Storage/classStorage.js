@@ -21,35 +21,34 @@ function solve() {
     class Storage {
         constructor(capacity) {
             this.capacity = capacity;
-            this.storage = {}; 
+            this.storage = {};
             this.totalCost = 0;
         }
 
         addProduct(product) {
 
-            if (typeof product.name !== 'string') {
-                return false; 
+            if (!product.name || typeof product.name !== 'string' || product.name.trim() === '') {
+                return; 
             }
           
             if (product.quantity <= 0 || product.price <= 0 || this.capacity < product.quantity) {
-                return false; 
+                return; 
             }
         
             if (!this.storage[product.name]) {
                 this.storage[product.name] = product;
             } else {
                 
-                if (this.capacity >= product.quantity) {
+                if (this.capacity >= this.storage[product.name].quantity + product.quantity) {
                     this.storage[product.name].quantity += product.quantity;
                     this.storage[product.name].price = product.price;
                 } else {
-                    return false; 
+                    return; 
                 }
             }
         
             this.capacity -= product.quantity;
             this.totalCost += product.price * product.quantity;
-            return true;
         }
 
 
@@ -59,7 +58,7 @@ function solve() {
                 productsArray.push(JSON.stringify(this.storage[productName]) + '\n');
             }
             this.productsArray = productsArray;
-            return productsArray.join('').trim();
+            return productsArray.join('').trimEnd();
         }
 
     }
