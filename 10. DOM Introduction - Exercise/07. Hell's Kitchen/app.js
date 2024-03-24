@@ -33,6 +33,80 @@ function solve() {
 
    function onClick () {
          
-      
+   const textAreaElement = document.querySelector('#inputs textarea');
+   const bestRestaurantElement = document.querySelector('#bestRestaurant p');
+   const bestWorkersElements = document.querySelector('#workers p');
+
+   const text = JSON.parse(textAreaElement.value);
+   let restaurants = {};
+
+// Iterate over each line in the text
+for (let i = 0; i < text.length; i++) {
+   let line = text[i];
+   let [restaurantName, workersWithSalaries] = line.split(' - ');
+   let workers = {};
+
+   // Split workers with salaries by comma and then by space space
+   let workersArray = workersWithSalaries.split(', ');
+   for (let j = 0; j < workersArray.length; j++) {
+       let workerInfo = workersArray[j];
+       let [worker, salary] = workerInfo.split(' ');
+       workers[worker] = parseInt(salary);
    }
+
+   restaurantName = restaurantName.trim();
+
+   if (restaurants.hasOwnProperty(restaurantName)) {   // Check if the restaurant already exists
+       Object.assign(restaurants[restaurantName], workers); // Update existing workers with their salaries
+   } else {
+       restaurants[restaurantName] = workers;  // Add new restaurant with workers
+   }
+}
+
+let bestRestaurantName = '';
+let bestAverageSalary = 0;
+let bestSalary = 0;
+let bestWorkersInfo = '';
+
+// Calculate average and best salary for each restaurant
+for (let restaurant in restaurants) {
+   let totalSalary = 0;
+   let numWorkers = 0;
+   let bestWorkerSalary = 0;
+   let workersInfo = '';
+
+   // Iterate over workers of the current restaurant
+   for (let worker in restaurants[restaurant]) {
+       let salary = restaurants[restaurant][worker];
+       totalSalary += salary;
+       numWorkers++;
+       if (salary > bestWorkerSalary) {
+           bestWorkerSalary = salary;
+       }
+       workersInfo += `Name: ${worker} With Salary: ${salary} `;
+   }
+
+   let averageSalary = totalSalary / numWorkers; // Calculate average salary for the given restaurant
+
+   if (averageSalary > bestAverageSalary) {
+       bestRestaurantName = restaurant;
+       bestAverageSalary = averageSalary;
+       bestSalary = bestWorkerSalary;
+       bestWorkersInfo = workersInfo;
+   }
+}
+
+// Sort workers within the best restaurant based on their salaries in descending order
+let sortedWorkers = Object.entries(restaurants[bestRestaurantName])
+   .sort((a, b) => b[1] - a[1])
+   .map(([worker, salary]) => `Name: ${worker} With Salary: ${salary} `)
+   .join('');
+
+// Format the output strings
+let bestRestaurantOutput = `Name: ${bestRestaurantName} Average Salary: ${bestAverageSalary.toFixed(2)} Best Salary: ${bestSalary.toFixed(2)}`;
+let workersOutput = sortedWorkers;
+
+bestRestaurantElement.textContent = bestRestaurantOutput;
+bestWorkersElements.textContent = workersOutput;
+}
 }
