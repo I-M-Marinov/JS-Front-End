@@ -5,11 +5,10 @@ Write a function that reads the text inside an input field and appends the speci
 function addItem() {
 
     const listOfItemsElements = document.querySelector('#items'); // Get the list of elements with id "items"
-    let newItemText = document.getElementById('newItemText').value; // Get the value of the newItemText input field with id "newItemText"
-
+    const inputElement = document.getElementById('newItemText'); // Get the element newItemText input field with id "newItemText"
     let li = document.createElement("li"); // Create list item
-    li.textContent = newItemText; // Add the text from the newItemText input field
     listOfItemsElements.appendChild(li); // Append it to the ul list of elements
-    newItemText = document.getElementById('newItemText').value = ''; // Clear the value of the newItemText
+    li.textContent = inputElement.value; // Add the text from the input field to the new element textContent
+    inputElement.value = ''; // Clear the value of the input element after it is added to the DOM
 
 }
