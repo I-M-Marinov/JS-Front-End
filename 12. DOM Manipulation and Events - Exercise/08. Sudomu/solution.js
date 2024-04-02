@@ -54,6 +54,8 @@ function solve() {
     const eightNumberElement = document.querySelector('#exercise tbody tr:last-of-type td:nth-child(2) input');
     const ninthNumberElement = document.querySelector('#exercise tbody tr:last-of-type td:last-of-type input');
 
+    
+
 
     quickCheckButtonElement.addEventListener('click', () => {
 
@@ -72,11 +74,11 @@ function solve() {
         if (isValid) {
             tableElement.style.border = '2px solid green';
             checkIdElement.style.color = 'green';
-            checkIdElement.textContent = `You solve it! Congratulations!`;
+            checkIdElement.textContent = `You solved it! Congratulations!`;
         } else {
             tableElement.style.border = '2px solid red';
             checkIdElement.style.color = 'red';
-            checkIdElement.textContent = `NOP! You are not done yet...`;
+            checkIdElement.textContent = `NOPE! You are not done yet...`;
         }
 
     });
