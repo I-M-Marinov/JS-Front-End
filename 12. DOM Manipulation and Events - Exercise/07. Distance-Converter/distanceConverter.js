@@ -20,8 +20,7 @@ selectedIndex gives you the 0-based index of the selected option. For example, i
                 1 yrd	0.9144 m
                 1 ft	0.3048 m
                 1 in	0.0254 m
-
-
+           
 */
 
 function attachEventsListeners() {
