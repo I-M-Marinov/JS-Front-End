@@ -35,8 +35,9 @@ function attachEvents() {
         fetch(postsUrl)
             .then(response => response.json())
             .then(posts => {
-                Object.values(posts)
-                    .forEach(post => {
+                const postArray = Array.from(Object.values(posts));
+                
+                postArray.forEach(post => {
                         const optionElement = document.createElement('option');
                         optionElement.value = post.id;
                         optionElement.textContent = post.title;
