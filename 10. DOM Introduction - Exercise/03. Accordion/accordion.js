@@ -29,8 +29,6 @@ function toggle() {
         extraTextElement.style.display = 'block';
         buttonElement.textContent = "Less";
     }
-    
-        console.log(buttonElement.textContent);
-        console.log(extraTextElement);
-        console.log(buttonElement);
     }
+
+    toggle();
