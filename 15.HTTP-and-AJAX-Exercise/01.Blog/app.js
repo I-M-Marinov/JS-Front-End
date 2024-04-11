@@ -17,76 +17,68 @@ Create an <option> for each post using its object key as value and current objec
 */
 
 function attachEvents() {
+    const postsURL = 'http://localhost:3030/jsonstore/blog/posts'
+    const commentsURL = 'http://localhost:3030/jsonstore/blog/comments'
 
-    const postsUrl = 'http://localhost:3030/jsonstore/blog/posts';
-    const commentsUrl = 'http://localhost:3030/jsonstore/blog/comments';
+    const loadButtonElement = document.getElementById('btnLoadPosts');
+    loadButtonElement.addEventListener('click', loadAllPosts);
 
-    const loadPostsButton = document.getElementById('btnLoadPosts');
-    const viewPostButton = document.getElementById('btnViewPost');
-    const selectPostElement = document.getElementById('posts');
-    const postBodyElement = document.getElementById('post-body');
-    const postComentsElement = document.getElementById('post-comments');
-    const postTitleElement = document.getElementById('post-title');
+    const selectedPostElement = document.getElementById('posts');
 
-    loadPostsButton.addEventListener('click', () => {
+    const viewButtonElement = document.getElementById('btnViewPost');
+    viewButtonElement.addEventListener('click', viewPost);
 
-        selectPostElement.innerHTML = '';
+    let allPosts = {};
 
-        fetch(postsUrl)
-            .then(response => response.json())
-            .then(posts => {
-                const postArray = Array.from(Object.values(posts));
-                
-                postArray.forEach(post => {
-                        const optionElement = document.createElement('option');
-                        optionElement.value = post.id;
-                        optionElement.textContent = post.title;
-                        selectPostElement.appendChild(optionElement);
-                    });
-            }).catch(err => console.log(err.message));
-    });
+    async function loadAllPosts(event) {
 
-    const commentsFragment = document.createDocumentFragment();
+        selectedPostElement.innerHTML = '';
 
-    viewPostButton.addEventListener('click', async () => {
+        const allPostsResponse = await fetch(postsURL);
+        allPosts = await allPostsResponse.json();
 
-        const selectedPostId = selectPostElement.value;
+        for (let postArr of Object.entries(allPosts)) {
 
-        try {
+            let optionElement = document.createElement('option');
+            optionElement.textContent = postArr[1].title;
+            optionElement.value = postArr[0];
+            selectedPostElement.appendChild(optionElement);
+        }
+    }
 
-        const postResponse = await fetch(`${postsUrl}/${selectedPostId}`);
-        const selectedPost = await postResponse.json();
+    async function viewPost(event) {
 
-        postBodyElement.textContent = selectedPost.body;
-        postTitleElement.textContent = selectedPost.title;
-            
-        } catch (error) {
-            console.log(error.message);
+        const currentPostObject = document.getElementById('posts');
+        let currentPostComments = [];
+
+        let allCommentsResponse = await fetch(commentsURL);
+        let allComments = await allCommentsResponse.json();
+
+        for (let commentArr of Object.entries(allComments)) {
+            if (commentArr[1].postId === currentPostObject.value) {
+                currentPostComments.push(commentArr[1].text);
+            }
         }
 
-        try {
+        let selectedPost = allPosts[currentPostObject.value];
+
+        let titleElement = document.getElementById('post-title');
+        titleElement.textContent = selectedPost.title;
+
+        let postContentElement = document.getElementById('post-body');
+        postContentElement.textContent = selectedPost.body;
+
+        const ulElement = document.getElementById('post-comments');
+
+        ulElement.innerHTML = '';
+
+        for (let comment of currentPostComments) {
             
-            const commentsResponse = await fetch(commentsUrl);
-        const comments = await commentsResponse.json();
-
-       Object.values(comments)
-            .filter(comment => comment.postId === selectedPostId)
-            .forEach(comment => {
-                postComentsElement.innerHTML = '';
-                const liElement = document.createElement('li');
-                liElement.id = comment.id;
-                liElement.textContent = comment.text;
-
-                commentsFragment.appendChild(liElement);
-            });
-            postComentsElement.appendChild(commentsFragment);
-
-        } catch (error) {
-            console.log(error.message);
+            let li = document.createElement('li');
+            li.textContent = comment;
+            ulElement.appendChild(li);
         }
-    });
-
-
+    }
 }
 
 attachEvents();

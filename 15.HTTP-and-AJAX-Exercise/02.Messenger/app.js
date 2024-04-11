@@ -42,6 +42,8 @@ function attachEvents() {
 
     refreshButtonElement.addEventListener('click', () => {
 
+        textAreaElement.value = '';
+
         fetch(requestUrl)
         .then(res => res.json())
         .then(data => {
