@@ -98,13 +98,14 @@ function createVacation(vacation) {
                     date: dateInputElement.value,
                     _id: vacation._id,
                 })
-
-                
             });
 
             nameInputElement.value = '';
             numberOfDaysInputElement.value = '';
             dateInputElement.value = '';
+
+            addVacationButtonElement.removeAttribute('disabled');
+            editVacationButtonElement.setAttribute('disabled', 'disabled');
 
             getVacations();
             
