@@ -2,6 +2,7 @@ const tasksUrl = 'http://localhost:3030/jsonstore/tasks';
 
 const loadVacationsButton = document.getElementById('load-vacations');
 const divListElement = document.getElementById('list');
+
 const addVacationButtonElement = document.getElementById('add-vacation');
 const editVacationButtonElement = document.getElementById('edit-vacation');
 
@@ -17,10 +18,6 @@ addVacationButtonElement.addEventListener('click', (event) => {
     const name = nameInputElement.value;
     const days = numberOfDaysInputElement.value;
     const date = dateInputElement.value;
-
-    nameInputElement.value = '';
-    numberOfDaysInputElement.value = '';
-    dateInputElement.value = '';
 
     const vacation = {
         name,
@@ -38,6 +35,7 @@ addVacationButtonElement.addEventListener('click', (event) => {
 
     createVacation(vacation);
     getVacations();
+    clearInputFields();
 
 });
 
@@ -84,8 +82,7 @@ function createVacation(vacation) {
         addVacationButtonElement.setAttribute('disabled', 'disabled');
         editVacationButtonElement.removeAttribute('disabled');
 
-        editVacationButtonElement.addEventListener('click', (event) =>{
-            event.preventDefault();
+        editVacationButtonElement.addEventListener('click', () =>{
 
             fetch(`${tasksUrl}/${vacation._id}`, {
                 method: 'PUT',
@@ -96,18 +93,14 @@ function createVacation(vacation) {
                     name: nameInputElement.value,
                     days: numberOfDaysInputElement.value,
                     date: dateInputElement.value,
-                    _id: vacation._id,
                 })
             });
-
-            nameInputElement.value = '';
-            numberOfDaysInputElement.value = '';
-            dateInputElement.value = '';
 
             addVacationButtonElement.removeAttribute('disabled');
             editVacationButtonElement.setAttribute('disabled', 'disabled');
 
             getVacations();
+            clearInputFields();
             
         });
 
@@ -141,5 +134,13 @@ function getVacations() {
             });
 
         });
+}
+
+function clearInputFields(){
+
+    nameInputElement.value = '';
+    numberOfDaysInputElement.value = '';
+    dateInputElement.value = '';
+
 }
 
